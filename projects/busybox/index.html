@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BusyBox at Microsoft Research | Kofi A. Ennin</title>
-<meta name="description" content="A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.">
+<meta name="description" content="A 3D-printable kit of buttons, switches, sliders, a knob and wires that snaps together into many different-looking devices, built to test whether vision-language-action models really understand the controls they manipulate.">
 <meta property="og:title" content="BusyBox: a benchmark for affordance generalization">
-<meta property="og:description" content="A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.">
+<meta property="og:description" content="A 3D-printable kit of buttons, switches, sliders, a knob and wires that snaps together into many different-looking devices, built to test whether vision-language-action models really understand the controls they manipulate.">
 <link rel="icon" href="../../assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,40 +25,65 @@
 <header class="proj-head">
   <p class="kicker">Research internship, Microsoft Research</p>
   <h1>BusyBox: a benchmark for affordance generalization</h1>
-  <p class="lede">A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.</p>
+  <p class="lede">A 3D-printable kit of buttons, switches, sliders, a knob and wires that snaps together into many different-looking devices, built to test whether vision-language-action models really understand the controls they manipulate.</p>
   <dl class="facts">
     <dt>Role</dt><dd>Robotics research intern: data-collection automation and robot operation</dd>
     <dt>When</dt><dd>August 2025</dd>
     <dt>Paper</dt><dd>Fortier, Adamson, Hellebrekers, LaScala, <span class="me">Ennin</span>, Murray, Kolobov, Mullins. <a href="https://arxiv.org/abs/2602.05441">arXiv:2602.05441</a>. Accepted at CoRL.</dd>
-    <dt>Robots</dt><dd>Mobile ALOHA (bimanual), with π₀.₅ and GR00T-N1.6 baselines</dd>
+    <dt>Links</dt><dd><a href="https://microsoft.github.io/BusyBox/">Project page</a>, <a href="https://github.com/microsoft/BusyBox">hardware</a>, <a href="https://huggingface.co/datasets/microsoft/BusyBox">dataset</a></dd>
   </dl>
 </header>
 
 <section>
   <h2>The question</h2>
-  <p>Vision-language-action (VLA) models can open a drawer or press a button they were shown during training. The open question is whether they understand the <em>affordance</em>, for example that a toggle switch flips and a slider slides, well enough to operate a device they have never seen that is built from the same kinds of controls. BusyBox is a benchmark built to measure exactly that.</p>
+  <p>Robot foundation models, also called vision-language-action (VLA) models, can press a button or flip a switch they were shown during training. The open question is whether they learn the <em>affordance</em>, for example that a switch flips and a knob turns, or simply memorise where each control sat in the scene. BusyBox is a benchmark built to tell those two apart.</p>
+  <figure class="fig narrow">
+    <img src="https://microsoft.github.io/BusyBox/BusyBox_assets/bb_head_no_background.png" alt="The assembled BusyBox: a 3D-printed panel with an E Ink display, coloured illuminated buttons, sliders, a knob, switches and plug-in wires." loading="lazy" onerror="this.closest('figure').remove()">
+    <figcaption>The assembled BusyBox. Image from the <a href="https://microsoft.github.io/BusyBox/">BusyBox project page</a>.</figcaption>
+  </figure>
 </section>
 
 <section>
-  <h2>The benchmark</h2>
-  <p>BusyBox is a physical board made of six modules carrying switches, sliders, buttons, a dial and a display. The modules can be swapped and rearranged, so the same set of controls can be presented as many visually different devices. A policy that has really learned "how a slider works" should transfer across layouts; one that memorised a scene should not.</p>
-  <p>The paper evaluates strong open-weight VLA models, π₀.₅ and GR00T-N1.6, and finds that generalising across BusyBox variants is very hard even for them. To make the benchmark easy to reproduce, the team released CAD files, a bill of materials and a language-annotated demonstration dataset collected on a bimanual Mobile ALOHA robot.</p>
+  <h2>The hardware</h2>
+  <p>BusyBox is a 3D-printable kit of six modules that snap together:</p>
+  <ul>
+    <li><strong>Display:</strong> an E Ink screen with LED indicators and the main electronics</li>
+    <li><strong>Buttons:</strong> four coloured, illuminated buttons</li>
+    <li><strong>Sliders:</strong> two adjustable sliders</li>
+    <li><strong>Knob:</strong> a six-position rotary knob with a handle</li>
+    <li><strong>Switches:</strong> two on/off switches</li>
+    <li><strong>Wires:</strong> coloured wires with pluggable connectors</li>
+  </ul>
+  <p>Modules can be swapped and rotated in under two minutes, so the same controls can be rebuilt into many devices that look different but work the same way.</p>
+  <figure class="fig">
+    <img src="https://microsoft.github.io/BusyBox/static/images/busybox_configurations.png" alt="Several BusyBox configurations side by side, each with the same modules arranged and rotated differently." loading="lazy" onerror="this.closest('figure').remove()">
+    <figcaption>Different BusyBox configurations built from the same six modules. Image from the <a href="https://microsoft.github.io/BusyBox/">BusyBox project page</a>.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>The protocol</h2>
+  <p>A model is fine-tuned on demonstrations from one "canonical" BusyBox layout and then tested on the same tasks with the box reconfigured. A model that has learned what a slider is should still work once the slider moves; a model that memorised the slider's position should not.</p>
+  <p>The released dataset has more than 1,000 language-annotated demonstrations collected by teleoperating a bimanual Mobile ALOHA robot. They cover seven task families and randomise the starting state of each control, the box's position and orientation, the robot's starting pose, and the wording of the instruction (by colour or by position).</p>
+  <p>The paper finds that affordance generalization is hard for even the strongest open-weight models it tests, π₀.₅ and GR00T-N1.6. Even "in-distribution" tasks can require out-of-distribution generalization in what the camera sees once the layout changes.</p>
 </section>
 
 <section>
   <h2>My part</h2>
   <ul>
     <li>Automated the data-collection pipelines used to record demonstrations.</li>
-    <li>Operated the robotic arm to collect demonstrations for the dataset, which grew to 1,993 bimanual demonstrations.</li>
+    <li>Operated the robot to collect demonstrations for the dataset.</li>
     <li>Co-authored the paper.</li>
   </ul>
 </section>
 
 <section>
-  <h2>Read more</h2>
+  <h2>Resources</h2>
   <ul>
+    <li><a href="https://microsoft.github.io/BusyBox/">Project page</a></li>
     <li><a href="https://arxiv.org/abs/2602.05441">Paper on arXiv</a></li>
-    <li><a href="https://www.microsoft.com/en-us/research/publication/benchmarking-affordance-generalization-with-busybox/">Microsoft Research publication page</a></li>
+    <li><a href="https://github.com/microsoft/BusyBox">CAD files, firmware and build instructions</a></li>
+    <li><a href="https://huggingface.co/datasets/microsoft/BusyBox">Dataset on Hugging Face</a></li>
   </ul>
 </section>
 

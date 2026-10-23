@@ -55,12 +55,12 @@ PAGES = [
         title="BusyBox: a benchmark for affordance generalization",
         short="BusyBox at Microsoft Research",
         kicker="Research internship, Microsoft Research",
-        lede="A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.",
+        lede="A 3D-printable kit of buttons, switches, sliders, a knob and wires that snaps together into many different-looking devices, built to test whether vision-language-action models really understand the controls they manipulate.",
         facts=[
             ("Role", "Robotics research intern: data-collection automation and robot operation"),
             ("When", "August 2025"),
             ("Paper", 'Fortier, Adamson, Hellebrekers, LaScala, <span class="me">Ennin</span>, Murray, Kolobov, Mullins. <a href="https://arxiv.org/abs/2602.05441">arXiv:2602.05441</a>. Accepted at CoRL.'),
-            ("Robots", "Mobile ALOHA (bimanual), with π₀.₅ and GR00T-N1.6 baselines"),
+            ("Links", '<a href="https://microsoft.github.io/BusyBox/">Project page</a>, <a href="https://github.com/microsoft/BusyBox">hardware</a>, <a href="https://huggingface.co/datasets/microsoft/BusyBox">dataset</a>'),
         ],
     ),
     dict(
