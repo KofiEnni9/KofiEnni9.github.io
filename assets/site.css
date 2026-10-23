@@ -181,3 +181,11 @@ footer {
 /* Keep diagram text legible on phones: let wide diagrams scroll sideways inside their figure */
 figure.fig.scroll { overflow-x: auto; }
 figure.fig.scroll svg.diagram { min-width: 640px; }
+
+/* Video clips */
+.clips { display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 720px) { .clips { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.clips figure { margin: 0; }
+.clips video { display: block; width: 100%; aspect-ratio: 848 / 478; object-fit: cover; background: var(--well); border-radius: 4px; }
+.clips figcaption { font-family: var(--sans); font-size: 0.84rem; line-height: 1.45; color: var(--muted); margin-top: 0.55rem; }
+.clips-note { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); margin: 1rem 0 0; }

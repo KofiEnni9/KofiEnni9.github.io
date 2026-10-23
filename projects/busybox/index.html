@@ -66,6 +66,10 @@
   <p>A model is fine-tuned on demonstrations from one "canonical" BusyBox layout and then tested on the same tasks with the box reconfigured. A model that has learned what a slider is should still work once the slider moves; a model that memorised the slider's position should not.</p>
   <p>The released dataset has more than 1,000 language-annotated demonstrations collected by teleoperating a bimanual Mobile ALOHA robot. They cover seven task families and randomise the starting state of each control, the box's position and orientation, the robot's starting pose, and the wording of the instruction (by colour or by position).</p>
   <p>The paper finds that affordance generalization is hard for even the strongest open-weight models it tests, π₀.₅ and GR00T-N1.6. Even "in-distribution" tasks can require out-of-distribution generalization in what the camera sees once the layout changes.</p>
+  <figure class="fig">
+    <video src="../../assets/video/busybox-teleop.mp4" poster="../../assets/video/busybox-teleop.jpg" controls muted loop playsinline preload="none" style="width:100%;border-radius:4px;background:var(--well)" aria-label="Two robot arms teleoperated to press buttons, flip switches and turn the knob on the BusyBox."></video>
+    <figcaption>Teleoperated demonstration collection on a bimanual Mobile ALOHA, at 2x speed. Video from the <a href="https://microsoft.github.io/BusyBox/">BusyBox project</a>, © Microsoft, MIT License.</figcaption>
+  </figure>
 </section>
 
 <section>

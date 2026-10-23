@@ -40,6 +40,25 @@
 
 <main>
 
+<section id="lab" aria-labelledby="h-lab">
+  <h2 id="h-lab">From the lab</h2>
+  <ul class="clips">
+    <li><figure>
+      <video src="assets/video/busybox-teleop.mp4" poster="assets/video/busybox-teleop.jpg" muted loop playsinline preload="none" aria-label="Two robot arms teleoperated to press buttons, flip switches and turn the knob on the BusyBox."></video>
+      <figcaption>Teleoperated data collection on the BusyBox with a bimanual Mobile ALOHA (2x speed).</figcaption>
+    </figure></li>
+    <li><figure>
+      <video src="assets/video/busybox-assembly.mp4" poster="assets/video/busybox-assembly.jpg" muted loop playsinline preload="none" aria-label="Hands unsnapping BusyBox modules and snapping them back in a new arrangement."></video>
+      <figcaption>Swapping and rotating modules to build a new BusyBox layout (2x speed).</figcaption>
+    </figure></li>
+    <li><figure>
+      <video src="assets/video/busybox-eval.mp4" poster="assets/video/busybox-eval.jpg" muted loop playsinline preload="none" aria-label="A learned policy controlling both robot arms as they reach toward the BusyBox."></video>
+      <figcaption>A learned policy being evaluated on the BusyBox.</figcaption>
+    </figure></li>
+  </ul>
+  <p class="clips-note">From <a href="projects/busybox/">BusyBox</a>, my Microsoft Research project. Videos from the <a href="https://microsoft.github.io/BusyBox/">BusyBox project</a>, © Microsoft, MIT License.</p>
+</section>
+
 <section id="work" aria-labelledby="h-work">
   <h2 id="h-work">Selected work</h2>
   <ul class="work">
@@ -386,6 +405,21 @@
     requestAnimationFrame(step);
   }
   window.addEventListener('themechange', () => draw(1));
+})();
+</script>
+
+<script>
+/* Lab clips: play only while on screen; with reduced motion, show controls and never autoplay. */
+(function () {
+  const vids = document.querySelectorAll('.clips video');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) { vids.forEach(v => { v.controls = true; v.preload = 'metadata'; }); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    const v = e.target;
+    if (e.isIntersecting) { const p = v.play(); if (p && p.catch) p.catch(() => { v.controls = true; }); }
+    else v.pause();
+  }), { threshold: 0.35 });
+  vids.forEach(v => io.observe(v));
 })();
 </script>
 </body>
