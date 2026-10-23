@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danso study platform | Kofi A. Ennin</title>
+<meta name="description" content="A study platform for Ghana&#x27;s National Science and Maths Quiz that retrieves real past questions, explains them with an open language model, and adapts which contests it quizzes you on as you improve.">
+<meta property="og:title" content="Danso: an adaptive study partner for Ghana&#x27;s NSMQ">
+<meta property="og:description" content="A study platform for Ghana&#x27;s National Science and Maths Quiz that retrieves real past questions, explains them with an open language model, and adapts which contests it quizzes you on as you improve.">
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <a class="home" href="../../">Kofi A. Ennin</a>
+  <nav aria-label="Site"><a href="../../#work">All work</a><a href="../../cv.pdf">CV</a></nav>
+</header>
+
+<article class="proj">
+<header class="proj-head">
+  <p class="kicker">Personal project</p>
+  <h1>Danso: an adaptive study partner for Ghana&#x27;s NSMQ</h1>
+  <p class="lede">A study platform for Ghana&#x27;s National Science and Maths Quiz that retrieves real past questions, explains them with an open language model, and adapts which contests it quizzes you on as you improve.</p>
+  <dl class="facts">
+    <dt>Role</dt><dd>Builder of the retrieval, model serving and bandit</dd>
+    <dt>When</dt><dd>2024</dd>
+    <dt>Stack</dt><dd>sentence-transformers, FAISS, Mistral-7B-Instruct (4-bit), FastAPI, Streamlit, LinUCB</dd>
+    <dt>Code</dt><dd><a href="https://github.com/KofiEnni9/Danso">KofiEnni9/Danso</a></dd>
+  </dl>
+</header>
+
+<section>
+  <h2>Why</h2>
+  <p>Ghana's National Science and Maths Quiz (NSMQ) is a televised competition between senior high schools, with rounds ranging from fundamentals in biology, chemistry, physics and maths to speed races and a timed problem of the day. Schools with strong coaching and archives of past questions have a large advantage. Danso aims to give a student anywhere in the country the same access: real past questions, explanations on demand, and practice that adapts as they improve.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <figure class="fig scroll">
+    <svg class="diagram" viewBox="0 0 860 240" role="img" aria-labelledby="danso-t">
+      <title id="danso-t">Danso architecture: a Streamlit app with quiz pages sends questions to a FastAPI service; the service retrieves past NSMQ questions from a FAISS index and asks a 4-bit Mistral-7B model to explain; a LinUCB bandit chooses which contest to quiz next.</title>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="10" y="30" width="190" height="170" rx="4"/>
+      <text class="lbl" x="24" y="56">Streamlit app</text><text class="sub" x="24" y="80">chat tutor</text><text class="sub" x="24" y="98">pop quiz</text><text class="sub" x="24" y="116">full quiz</text>
+      <rect class="box hl" x="280" y="30" width="230" height="170" rx="4"/>
+      <text class="lbl" x="294" y="56">FastAPI service</text><text class="sub" x="294" y="80">parses the request into</text><text class="sub" x="294" y="98">year, subject, round (JSON)</text><text class="sub" x="294" y="128">Mistral-7B-Instruct v0.3</text><text class="sub" x="294" y="146">4-bit NF4, one GPU</text>
+      <rect class="box" x="590" y="30" width="260" height="75" rx="4"/>
+      <text class="lbl" x="604" y="56">FAISS index</text><text class="sub" x="604" y="76">past questions, all-mpnet-base-v2</text><text class="sub" x="604" y="92">+ year/round feature</text>
+      <rect class="box" x="590" y="125" width="260" height="75" rx="4"/>
+      <text class="lbl" x="604" y="151">LinUCB bandit</text><text class="sub" x="604" y="171">picks the next contest to</text><text class="sub" x="604" y="187">quiz from the learner's results</text>
+      <path class="arrow" d="M200,90 H277"/><path class="arrow" d="M277,140 H203"/>
+      <path class="arrow" d="M510,68 H587"/><path class="arrow" d="M510,162 H587"/>
+    </svg>
+  </figure>
+</section>
+
+<section>
+  <h2>How it works</h2>
+  <ul>
+    <li><strong>A searchable archive.</strong> Past NSMQ questions, collected as spreadsheets by year and round, are embedded with the all-mpnet-base-v2 sentence transformer. Each question's preamble is joined to the question text so context is not lost, and a year-and-round feature is appended to the embedding so a search can be steered toward a particular contest. Everything goes into a FAISS index.</li>
+    <li><strong>An open model on a small budget.</strong> Explanations come from Mistral-7B-Instruct v0.3 loaded in 4-bit NF4 with double quantisation through bitsandbytes, small enough to serve from a single Colab GPU behind FastAPI.</li>
+    <li><strong>Structured requests.</strong> Commands like "show me a 2019 chemistry question" are first turned into a small JSON object (year, subject, round) by the model itself, which then drives the retrieval. Ordinary questions go to a tutoring prompt that includes the recent conversation.</li>
+    <li><strong>Practice that adapts.</strong> A LinUCB contextual bandit treats each past contest as an arm. It balances quizzing the learner on contests where they are likely to improve with exploring ones they have not tried, and it updates after every answer.</li>
+  </ul>
+</section>
+
+<nav class="pager" aria-label="More projects">
+  <a class="prev" href="../salo/"><span>Previous</span><strong>SALO reading assistant</strong></a>
+  <a class="next" href="../building-classifier/"><span>Next</span><strong>Campus building classifier</strong></a>
+</nav>
+</article>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+</div>
+</body>
+</html>

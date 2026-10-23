@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vision-based teleoperation | Kofi A. Ennin</title>
+<meta name="description" content="Stand in front of a webcam, strike a pose, and an SO-101 arm copies your arm in real time. No leader arm, no markers, no calibration rig.">
+<meta property="og:title" content="Marionette Live: driving a robot arm with your own arm">
+<meta property="og:description" content="Stand in front of a webcam, strike a pose, and an SO-101 arm copies your arm in real time. No leader arm, no markers, no calibration rig.">
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <a class="home" href="../../">Kofi A. Ennin</a>
+  <nav aria-label="Site"><a href="../../#work">All work</a><a href="../../cv.pdf">CV</a></nav>
+</header>
+
+<article class="proj">
+<header class="proj-head">
+  <p class="kicker">HackGT 13, Georgia Tech, team of three</p>
+  <h1>Marionette Live: driving a robot arm with your own arm</h1>
+  <p class="lede">Stand in front of a webcam, strike a pose, and an SO-101 arm copies your arm in real time. No leader arm, no markers, no calibration rig.</p>
+  <dl class="facts">
+    <dt>Role</dt><dd>Team member. I set up the one-arm teleop kit in the repo and worked on the tracking-loss safety behaviour</dd>
+    <dt>When</dt><dd>September 2026</dd>
+    <dt>Stack</dt><dd>MediaPipe (browser), JavaScript, Three.js twin, Python bridge, Feetech STS3215 servos, TimescaleDB</dd>
+    <dt>Code</dt><dd><a href="https://github.com/Im-ma/Teleoperation-Arm">Im-ma/Teleoperation-Arm</a></dd>
+  </dl>
+</header>
+
+<section>
+  <h2>The idea</h2>
+  <p>Most low-cost arm teleoperation uses a leader arm: a second, passive copy of the robot that you move by hand. That doubles the hardware and ties the operator to a desk. We wanted the operator's own body to be the controller, with nothing but a webcam, aimed at a future where a specialist could guide a robot remotely, for example in robot-assisted surgery.</p>
+  <figure class="fig narrow">
+    <img src="../../assets/img/teleop-arm.png" width="586" height="460" alt="3D render of the SO-101 robot arm: a base, a shoulder motor, an upper arm, a forearm and a two-fingered gripper, reaching forward and down.">
+    <figcaption>The SO-101 follower arm, rendered from the URDF and STL meshes in the project repository. The browser shows the same model live as a digital twin.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>From pixels to joint angles</h2>
+  <figure class="fig scroll">
+    <svg class="diagram" viewBox="0 0 860 200" role="img" aria-labelledby="tele-t">
+      <title id="tele-t">Data flow: webcam to MediaPipe pose and hand tracking in the browser, to arm angles, to filtering and safety, to a Python bridge that drives the servos at 30 Hz, with telemetry logged at 10 Hz.</title>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="10" y="40" width="120" height="70" rx="4"/><text class="lbl" x="24" y="68">Webcam</text><text class="sub" x="24" y="88">1280 x 720</text>
+      <rect class="box" x="165" y="40" width="150" height="70" rx="4"/><text class="lbl" x="179" y="68">MediaPipe</text><text class="sub" x="179" y="88">pose + hand, in browser</text>
+      <rect class="box hl" x="350" y="40" width="160" height="70" rx="4"/><text class="lbl" x="364" y="68">Arm angles</text><text class="sub" x="364" y="88">exact SO-101 kinematics</text>
+      <rect class="box hl" x="545" y="40" width="150" height="70" rx="4"/><text class="lbl" x="559" y="68">Filter + safety</text><text class="sub" x="559" y="88">One Euro, holds, lock</text>
+      <rect class="box" x="730" y="40" width="120" height="70" rx="4"/><text class="lbl" x="744" y="68">Python bridge</text><text class="sub" x="744" y="88">servos at 30 Hz</text>
+      <path class="arrow" d="M130,75 H162"/><path class="arrow" d="M315,75 H347"/><path class="arrow" d="M510,75 H542"/><path class="arrow" d="M695,75 H727"/>
+      <rect class="box" x="545" y="140" width="305" height="44" rx="4"/><text class="lbl" x="559" y="167">Telemetry: target vs measured, 10 Hz</text>
+      <path class="arrow" d="M790,110 V137"/>
+    </svg>
+  </figure>
+  <ul>
+    <li><strong>Tracking.</strong> MediaPipe's most accurate pose model runs in the browser. The hand is only about 5% of a 720p frame, too small for reliable finger landmarks, so the app crops a square around the tracked wrist, enlarges it to 256 pixels, finds the hand there, and maps the landmarks back to the full frame.</li>
+    <li><strong>Body angles.</strong> Shoulder lift and elbow bend come from the 3D world landmarks. Base rotation is the upper arm's azimuth relative to the line across the shoulders, so bending the elbow never steers the base.</li>
+    <li><strong>Robot angles.</strong> The SO-101's link elevations were fitted from its URDF to within a thousandth of a degree, so each robot link copies the matching human segment: upper arm to upper link, forearm to forearm, hand to tool.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Making it steady</h2>
+  <p>Raw pose estimates jitter by a degree or two every frame, and occasionally jump wildly when a landmark is misread. A servo faithfully copying that would shake. Each feature goes through its own filter chain:</p>
+  <ul>
+    <li>A One Euro filter, which smooths heavily when the arm is still and lets fast motion through with little lag, tuned per joint.</li>
+    <li>A dead zone with hysteresis, so small wobble never reaches the robot but large moves pass smoothly.</li>
+    <li>Jump rejection: a change of more than 30 degrees in one frame is treated as a glitch and held until it persists for 0.2 s.</li>
+    <li>Per-joint confidence gating: one bad landmark freezes that joint instead of stopping the whole arm. The gripper uses a median of the last five readings so a single misread frame cannot snap the claw.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Safety when tracking is lost</h2>
+  <p>A camera-driven robot has to behave sensibly when it cannot see you. The behaviour is a small state machine:</p>
+  <ol>
+    <li><strong>Engage.</strong> Strike the "goalpost" pose (upper arm out, forearm up) and hold it for one second to take control. Nothing moves before that.</li>
+    <li><strong>Hold.</strong> If tracking drops, the arm stops where it is instead of chasing noise.</li>
+    <li><strong>Resume.</strong> When you come back and put your hand where the robot's hand is, it re-locks and blends back in slowly.</li>
+    <li><strong>Return home.</strong> After 10 seconds with nobody in view, the arm glides back to its home pose.</li>
+  </ol>
+  <p>The browser also releases the robot when its tab goes to the background, since some browsers keep the camera running at full rate there. A voice coach with on-screen captions tells the operator what to do ("Step a little to your left", "I lost you. Paused."). An optional language command can trigger a gesture, but the language model can only pick a name from a fixed list, and the gesture runs at capped speed and only while nobody is driving.</p>
+</section>
+
+<section>
+  <h2>Instrumented</h2>
+  <p>The bridge logs every joint's target and measured angle at 10 Hz, optionally into a TimescaleDB hypertable from a background task so the 30 Hz robot loop never waits on the database. A replay page plays past sessions back, which made it possible to see exactly where tracking lag or a servo limit caused a miss.</p>
+</section>
+
+<nav class="pager" aria-label="More projects">
+  <a class="prev" href="../busybox/"><span>Previous</span><strong>BusyBox at Microsoft Research</strong></a>
+  <a class="next" href="../salo/"><span>Next</span><strong>SALO reading assistant</strong></a>
+</nav>
+</article>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+</div>
+</body>
+</html>

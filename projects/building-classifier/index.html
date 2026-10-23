@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus building classifier | Kofi A. Ennin</title>
+<meta name="description" content="A ResNet-50 fine-tuned to tell ten Mississippi State buildings apart from phone photos, reaching 99.45% validation accuracy on Colab compute.">
+<meta property="og:title" content="Recognising campus buildings from a photo">
+<meta property="og:description" content="A ResNet-50 fine-tuned to tell ten Mississippi State buildings apart from phone photos, reaching 99.45% validation accuracy on Colab compute.">
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <a class="home" href="../../">Kofi A. Ennin</a>
+  <nav aria-label="Site"><a href="../../#work">All work</a><a href="../../cv.pdf">CV</a></nav>
+</header>
+
+<article class="proj">
+<header class="proj-head">
+  <p class="kicker">MSU AI Club Campus Vision Challenge, 1st place</p>
+  <h1>Recognising campus buildings from a photo</h1>
+  <p class="lede">A ResNet-50 fine-tuned to tell ten Mississippi State buildings apart from phone photos, reaching 99.45% validation accuracy on Colab compute.</p>
+  <dl class="facts">
+    <dt>Team</dt><dd>Team se7en: Kofi A. Ennin and Sandys Ayuumah</dd>
+    <dt>When</dt><dd>2024</dd>
+    <dt>Stack</dt><dd>PyTorch, torchvision, scikit-learn, Google Colab</dd>
+    <dt>Code</dt><dd><a href="https://github.com/KofiEnni9/buildingclassification">KofiEnni9/buildingclassification</a></dd>
+  </dl>
+</header>
+
+<section>
+  <h2>The challenge</h2>
+  <p>The MSU AI Club's Campus Vision Challenge asked teams to identify which campus building appears in a photo, across ten buildings: Butler, Carpenter, Lee, McCain, McCool, Simrall, Swalm and Walker Halls, Old Main, and the Student Union. Judges ran each team's model on their own held-out photos, so the model had to cope with whatever lighting, angle and phone camera the judges used.</p>
+  <figure class="fig">
+    <img src="../../assets/img/building-walker-hall.jpg" width="1279" height="697" alt="Photo of Walker Engineering Laboratories at dusk: a three-storey red-brick building with rows of windows and a lit glass entrance.">
+    <figcaption>The sample image shipped with the inference script: Walker Engineering Laboratories at dusk.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Approach</h2>
+  <ul>
+    <li><strong>Backbone.</strong> An ImageNet-pretrained ResNet-50 with its final layer replaced by a ten-way classifier, fine-tuned end to end with SGD (learning rate 0.001, momentum 0.9). We tried EfficientNet first, but ResNet-50 did better on this task.</li>
+    <li><strong>Augmentation aimed at the judges' photos.</strong> Resize to 580 and random-crop to 512, colour jitter for time of day, horizontal flips, occasional small rotations and vertical flips, Gaussian blur for shaky or out-of-focus shots, and random erasing so the model cannot depend on any single feature such as one doorway or sign.</li>
+    <li><strong>Robust data loading.</strong> A custom image-folder loader skips corrupt files instead of crashing a training run, which mattered on limited Colab sessions.</li>
+    <li><strong>Judging.</strong> A standalone inference script runs on GPU or CPU, loads the trained weights and prints a prediction and confidence for every image in a folder.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <div class="table-scroll">
+  <table class="results">
+    <thead><tr><th>Metric (validation, after 11 epochs)</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Accuracy</td><td class="num">0.9945</td></tr>
+      <tr><td>Precision</td><td class="num">0.9945</td></tr>
+      <tr><td>Recall</td><td class="num">0.9945</td></tr>
+      <tr><td>F1 score</td><td class="num">0.9945</td></tr>
+      <tr><td>Log loss</td><td class="num">0.0300</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The team took first place. Colab compute limits capped training at 11 epochs and left some architecture and augmentation options unexplored.</p>
+</section>
+
+<nav class="pager" aria-label="More projects">
+  <a class="prev" href="../danso/"><span>Previous</span><strong>Danso study platform</strong></a>
+  <a class="next" href="../../#work"><span>Back to</span><strong>All work</strong></a>
+</nav>
+</article>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+</div>
+</body>
+</html>

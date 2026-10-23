@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SALO reading assistant | Kofi A. Ennin</title>
+<meta name="description" content="A desktop PDF reader that summarises the page you are on as you scroll and answers questions about everything you have open, citing the right document.">
+<meta property="og:title" content="SALO: a PDF reader that reads along with you">
+<meta property="og:description" content="A desktop PDF reader that summarises the page you are on as you scroll and answers questions about everything you have open, citing the right document.">
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <a class="home" href="../../">Kofi A. Ennin</a>
+  <nav aria-label="Site"><a href="../../#work">All work</a><a href="../../cv.pdf">CV</a></nav>
+</header>
+
+<article class="proj">
+<header class="proj-head">
+  <p class="kicker">Personal project</p>
+  <h1>SALO: a PDF reader that reads along with you</h1>
+  <p class="lede">A desktop PDF reader that summarises the page you are on as you scroll and answers questions about everything you have open, citing the right document.</p>
+  <dl class="facts">
+    <dt>Role</dt><dd>Sole developer, front end and back end</dd>
+    <dt>When</dt><dd>2025</dd>
+    <dt>Stack</dt><dd>Electron, React, Redux, pdf.js, Tailwind, FastAPI, Pinecone, BM25, Claude tool use, Firebase</dd>
+    <dt>Code</dt><dd><a href="https://github.com/KofiEnni9/salo-readingtool">KofiEnni9/salo-readingtool</a></dd>
+  </dl>
+</header>
+
+<section>
+  <h2>What it does</h2>
+  <p>Reading dense papers usually means juggling a PDF, a chat window and a notes file. SALO puts them in one desktop app. As you scroll, a side panel streams a summary of the page in view. A chat panel answers questions grounded in the PDF you are reading, or across every PDF you have open, and points back to the pages it used. You can also have pages read aloud.</p>
+</section>
+
+<section>
+  <h2>Architecture</h2>
+  <figure class="fig scroll">
+    <svg class="diagram" viewBox="0 0 860 260" role="img" aria-labelledby="salo-t">
+      <title id="salo-t">SALO architecture: an Electron and React reader posts page text to a FastAPI backend, which embeds pages into a per-user, per-PDF Pinecone namespace and streams summaries and chat answers back over server-sent events, using Claude with retrieval tools.</title>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+      <rect class="box" x="10" y="30" width="200" height="190" rx="4"/>
+      <text class="lbl" x="24" y="56">Desktop reader</text>
+      <text class="sub" x="24" y="80">Electron + React + Redux</text>
+      <text class="sub" x="24" y="98">pdf.js renders pages</text>
+      <text class="sub" x="24" y="116">tracks the page in view</text>
+      <text class="sub" x="24" y="134">summary + chat panels</text>
+      <text class="sub" x="24" y="152">Firebase sign-in</text>
+      <rect class="box hl" x="290" y="30" width="230" height="190" rx="4"/>
+      <text class="lbl" x="304" y="56">FastAPI backend</text>
+      <text class="sub" x="304" y="80">POST /analyze starts a job</text>
+      <text class="sub" x="304" y="98">GET /pdf_summary  (SSE)</text>
+      <text class="sub" x="304" y="116">GET /chat_response (SSE)</text>
+      <text class="sub" x="304" y="146">hybrid retrieval:</text>
+      <text class="sub" x="304" y="164">vector top-5, BM25 re-rank</text>
+      <path class="arrow" d="M210,95 H287"/><path class="arrow" d="M287,150 H213"/>
+      <text class="sub" x="222" y="88">page text</text><text class="sub" x="222" y="168">streamed</text>
+      <rect class="box" x="600" y="30" width="250" height="80" rx="4"/>
+      <text class="lbl" x="614" y="56">Pinecone</text><text class="sub" x="614" y="76">1536-d embeddings, one</text><text class="sub" x="614" y="92">namespace per user and PDF</text>
+      <rect class="box" x="600" y="140" width="250" height="80" rx="4"/>
+      <text class="lbl" x="614" y="166">Claude with tools</text><text class="sub" x="614" y="186">search this PDF, search all PDFs,</text><text class="sub" x="614" y="202">list PDFs, generate questions</text>
+      <path class="arrow" d="M520,70 H597"/><path class="arrow" d="M520,180 H597"/>
+    </svg>
+  </figure>
+</section>
+
+<section>
+  <h2>How the pieces work</h2>
+  <ul>
+    <li><strong>Streaming everything.</strong> The reader posts the page text to <code>/analyze</code>, which starts a background job and returns at once. Summaries and chat answers come back over server-sent events, so text appears as it is generated instead of after a long spinner.</li>
+    <li><strong>Per-document memory.</strong> The first time a PDF is opened, its pages are embedded and stored in a Pinecone namespace keyed by user and file name. Reopening the document skips the work, and one user's documents never leak into another's search.</li>
+    <li><strong>Hybrid retrieval.</strong> Vector search returns the five closest chunks; BM25 re-scores them by exact term overlap, and a weighted blend (70% vector, 30% BM25) picks the top pages. Pure vector search is weak on exact symbols, equation names and acronyms, which are everywhere in technical papers; BM25 catches those.</li>
+    <li><strong>The model chooses where to look.</strong> Instead of always stuffing context into the prompt, Claude gets four tools: search the PDF being read, search across all open PDFs, list which PDFs are open, and generate practice questions. It decides which to call based on the question, so "what does this page mean" and "how does this compare to the other paper" take different routes.</li>
+    <li><strong>The page in view comes first.</strong> Every request carries the page currently on screen, so summaries and answers start where the reader actually is.</li>
+  </ul>
+</section>
+
+<nav class="pager" aria-label="More projects">
+  <a class="prev" href="../teleoperation/"><span>Previous</span><strong>Vision-based teleoperation</strong></a>
+  <a class="next" href="../danso/"><span>Next</span><strong>Danso study platform</strong></a>
+</nav>
+</article>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+</div>
+</body>
+</html>

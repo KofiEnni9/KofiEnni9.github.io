@@ -1,0 +1,52 @@
+<section>
+  <h2>Why trunk diameter</h2>
+  <p>For an off-road vehicle, a tree is not just "an obstacle". Whether it can push through brush, how wide a gap is, and what a forestry crew wants recorded all depend on how big the trunks are. Foresters measure diameter at breast height, 4.5 ft (1.37 m) above the ground. The goal here was to get that number automatically from a single LiDAR sweep, fast enough to run on the vehicle.</p>
+  <figure class="fig narrow">
+    <img src="../../assets/img/trunk-raw.png" width="1050" height="1050" alt="Top-down view of a LiDAR scan: concentric rings of ground returns around the sensor, broken by dozens of small dark clusters where tree trunks block the beams.">
+    <figcaption>The input: one sweep from a stationary Warthog UGV in a wooded yard, seen from above and coloured by height. Each dark blob that interrupts the rings is a trunk casting a LiDAR shadow.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Pipeline</h2>
+  <p>Each stage is a separate, timed step in C++17, with per-stage latency printed by small timing macros so the slow stage is always obvious.</p>
+  <ol>
+    <li><strong>Load and convert.</strong> Read the PCD with PCL and convert it into NATURE's lightweight point-cloud message so the stack's own perception code can run on it.</li>
+    <li><strong>Remove the ground.</strong> NATURE's elevation grid (0.4 m cells, slope threshold 0.3) splits the cloud into surface returns and everything standing on it.</li>
+    <li><strong>Slice at breast height.</strong> Keep only obstacle points between 4 ft and 5 ft (1.22 m to 1.52 m) above the lowest obstacle point. A trunk becomes a thin ring of points; leaves, brush and branches mostly fall outside the band.</li>
+    <li><strong>Cluster.</strong> Euclidean clustering with a 0.1 m radius over a hand-written k-d tree: a balanced build from median splits, then radius searches that prune whole subtrees whose splitting plane is farther than the threshold.</li>
+    <li><strong>Fit.</strong> For each cluster, a least-squares cylinder fit (axis, centre and radius, solved with Eigen) gives the diameter, and a RANSAC circle fit (1,000 iterations) rejects outlier points from bark texture and nearby twigs.</li>
+    <li><strong>Write out.</strong> Every cluster is saved to a coloured, labelled PCD together with its estimated diameter, ready to inspect in a viewer.</li>
+  </ol>
+  <div class="fig-group">
+    <div class="fig-pair">
+      <figure class="fig"><img src="../../assets/img/trunk-ground.png" width="1050" height="1050" alt="The same scan with ground points in light grey and above-ground points in black."></figure>
+      <figure class="fig"><img src="../../assets/img/trunk-fits.png" width="1050" height="1050" alt="Breast-height slice within 11 m of the sensor, with about a dozen clusters outlined by fitted circles labelled 16 cm to 38 cm."></figure>
+    </div>
+    <figcaption>Left: ground (grey) separated from everything standing on it. Right: the breast-height slice near the vehicle, with a fitted circle and diameter for each trunk-shaped cluster.</figcaption>
+  </div>
+</section>
+
+<section>
+  <h2>What makes it hard</h2>
+  <p>A LiDAR only ever sees the side of a trunk that faces it, so at breast height a trunk is not a circle but an arc covering a third of it or less. A circle fit through a short arc is sensitive to noise: a few millimetres of bark texture can swing the radius by centimetres. Brush and low branches that survive the height slice add clusters that are not trunks at all.</p>
+  <figure class="fig">
+    <img src="../../assets/img/trunk-closeups.png" width="1600" height="467" alt="Four close-ups of trunk clusters. Each shows dark inlier points along one side of a teal fitted circle, with grey outliers scattered around.">
+    <figcaption>Four of the best-supported trunks up close. Dark points are RANSAC inliers and grey points are rejected. Every trunk is only seen on one side, which is why the outlier rejection matters.</figcaption>
+  </figure>
+  <p>That is why the pipeline pairs a geometric cylinder fit with RANSAC, and why the height band is narrow. The useful levers are the band height, the clustering radius and the inlier threshold, and the timing output makes it cheap to sweep them.</p>
+  <figure class="fig narrow">
+    <img src="../../assets/img/trunk-cpp-output.png" width="1050" height="1050" alt="Clusters from the C++ program, each in its own colour, scattered around the sensor.">
+    <figcaption>The C++ program's own output file, each cluster in the colour the program assigned it.</figcaption>
+  </figure>
+  <p>The figures on this page were rendered in Python from the PCD files in the repository. The ground, slice and fit plots re-run the same stages with the same parameters as the C++ code so the steps can be shown one at a time; the last figure is the C++ output as written.</p>
+</section>
+
+<section>
+  <h2>Open directions</h2>
+  <ul>
+    <li>Fuse several scans as the vehicle moves, so trunks are seen from more than one side and the arcs close up.</li>
+    <li>Filter clusters by shape (verticality across stacked slices) before fitting, to throw out brush early.</li>
+    <li>Compare against tape-measured diameters to put a real error bar on the estimates.</li>
+  </ul>
+</section>

@@ -1,0 +1,51 @@
+<section>
+  <h2>Why label LiDAR, not just images</h2>
+  <p>A camera can tell grass from gravel, but it cannot tell how far away either one is, and it goes blind at dusk and in fog. LiDAR gives exact geometry in any light, but on its own a point is just a position and an intensity. Labelling every LiDAR return with a terrain class gives the planner both: where things are and what they are. Tall grass and a fallen log can have the same height profile and need very different decisions.</p>
+  <figure class="fig">
+    <img src="../../assets/img/seg-scan-3d.png" width="1060" height="707" alt="Oblique 3D view of a LiDAR scan in a wood: rings of ground returns in the centre, vertical streaks of points for tree trunks, and clumps of brush, coloured from purple (low) to yellow (high).">
+    <figcaption>A raw Ouster scan from a Warthog UGV in a wooded area, coloured by height. The segmentation model's job is to give each of these points one of the classes below.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>The label set</h2>
+  <p>The classes are chosen by what they mean for driving, not by what the plants are called:</p>
+  <ul class="swatches" aria-label="Class colours">
+    <li><i style="background:#ECFA14"></i>Low vegetation, shrubs</li>
+    <li><i style="background:#FAAD14"></i>High vegetation, foliage</li>
+    <li><i style="background:#A6A6A6"></i>Smooth trail</li>
+    <li><i style="background:#2E439A"></i>Rough trail, bumpy road, gravel</li>
+    <li><i style="background:#00FFFF"></i>Grass</li>
+    <li><i style="background:#FF13A6"></i>Obstacle: fallen trunks, rocks</li>
+    <li><i style="background:#000000"></i>Unlabelled</li>
+  </ul>
+  <p>Scans were labelled with voxel labels in MATLAB's Lidar Labeler and exported to per-point labels for training. I expanded the labelled set to 450 scans and split it 70/20/10 into training, validation and test.</p>
+</section>
+
+<section>
+  <h2>Models</h2>
+  <p>I set up three very different point-cloud architectures against the same CAVS data so they could be compared on equal terms:</p>
+  <ul>
+    <li><strong>FRNet</strong> (frustum-range network, in MMDetection3D) projects the scan into a 2D range image, runs a fast 2D backbone, and then fuses frustum features back onto every original point so no point is lost to the projection. I wrote the CAVS dataset class, its 7-class palette and label mapping, and the loading transforms.</li>
+    <li><strong>Point Transformer V3</strong> serialises the cloud along space-filling curves (Z-order and Hilbert) and runs attention over local patches. It is trained with cross-entropy plus a Lovász-softmax loss, which optimises IoU more directly.</li>
+    <li><strong>SPVCNN</strong>, a sparse voxel network with a parallel point branch, as a strong convolutional baseline.</li>
+  </ul>
+  <p>All three train with AdamW and a one-cycle learning-rate schedule.</p>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <div class="table-scroll">
+  <table class="results">
+    <thead><tr><th>Model</th><th>Held-out mIoU</th><th>High vegetation IoU</th></tr></thead>
+    <tbody><tr><td>FRNet, 7 classes, 450 scans</td><td class="num">0.65</td><td class="num">0.94</td></tr></tbody>
+  </table>
+  </div>
+  <p>High vegetation is the easy class: it is large, tall and geometrically distinct. The hard boundaries are the ones that matter most for driving, such as grass versus smooth grass trail and rough trail versus scattered low brush, where geometry barely changes and the label depends on texture that LiDAR samples only coarsely. For review, I rendered colour-coded ground-truth and predicted clouds side by side in MATLAB so mistakes could be traced to specific terrain.</p>
+</section>
+
+<section>
+  <h2>The image side: CaSSeD</h2>
+  <p>I am also a co-author on CaSSeD, the CAVS Semantic Segmentation Dataset for off-road driving. It pairs 1,077 annotated real camera images from five drives on the CAVS proving ground with 1,947 synthetic image pairs from the MAVS simulator, across six classes: smooth trail, rough trail, small vegetation, forest, sky and obstacles.</p>
+  <p class="where">Dabbiru, Sharma, <span class="me">Ennin</span>, Goodin, Hudson, Doude, Carruth, Ball. CAVS semantic segmentation dataset for off-road autonomous vehicles. Proc. SPIE 13474, 2025. <a href="https://www.cavs.msstate.edu/resources/autonomous_dataset.php">Dataset page</a>.</p>
+</section>

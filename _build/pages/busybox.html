@@ -1,0 +1,27 @@
+<section>
+  <h2>The question</h2>
+  <p>Vision-language-action (VLA) models can open a drawer or press a button they were shown during training. The open question is whether they understand the <em>affordance</em>, for example that a toggle switch flips and a slider slides, well enough to operate a device they have never seen that is built from the same kinds of controls. BusyBox is a benchmark built to measure exactly that.</p>
+</section>
+
+<section>
+  <h2>The benchmark</h2>
+  <p>BusyBox is a physical board made of six modules carrying switches, sliders, buttons, a dial and a display. The modules can be swapped and rearranged, so the same set of controls can be presented as many visually different devices. A policy that has really learned "how a slider works" should transfer across layouts; one that memorised a scene should not.</p>
+  <p>The paper evaluates strong open-weight VLA models, π₀.₅ and GR00T-N1.6, and finds that generalising across BusyBox variants is very hard even for them. To make the benchmark easy to reproduce, the team released CAD files, a bill of materials and a language-annotated demonstration dataset collected on a bimanual Mobile ALOHA robot.</p>
+</section>
+
+<section>
+  <h2>My part</h2>
+  <ul>
+    <li>Automated the data-collection pipelines used to record demonstrations.</li>
+    <li>Operated the robotic arm to collect demonstrations for the dataset, which grew to 1,993 bimanual demonstrations.</li>
+    <li>Co-authored the paper.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Read more</h2>
+  <ul>
+    <li><a href="https://arxiv.org/abs/2602.05441">Paper on arXiv</a></li>
+    <li><a href="https://www.microsoft.com/en-us/research/publication/benchmarking-affordance-generalization-with-busybox/">Microsoft Research publication page</a></li>
+  </ul>
+</section>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BusyBox at Microsoft Research | Kofi A. Ennin</title>
+<meta name="description" content="A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.">
+<meta property="og:title" content="BusyBox: a benchmark for affordance generalization">
+<meta property="og:description" content="A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.">
+<link rel="icon" href="../../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=JetBrains+Mono:wght@400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="topbar">
+  <a class="home" href="../../">Kofi A. Ennin</a>
+  <nav aria-label="Site"><a href="../../#work">All work</a><a href="../../cv.pdf">CV</a></nav>
+</header>
+
+<article class="proj">
+<header class="proj-head">
+  <p class="kicker">Research internship, Microsoft Research</p>
+  <h1>BusyBox: a benchmark for affordance generalization</h1>
+  <p class="lede">A physical board of switches, sliders, buttons and dials that can be rearranged into many different-looking devices, built to test whether vision-language-action policies really understand the controls they manipulate.</p>
+  <dl class="facts">
+    <dt>Role</dt><dd>Robotics research intern: data-collection automation and robot operation</dd>
+    <dt>When</dt><dd>August 2025</dd>
+    <dt>Paper</dt><dd>Fortier, Adamson, Hellebrekers, LaScala, <span class="me">Ennin</span>, Murray, Kolobov, Mullins. <a href="https://arxiv.org/abs/2602.05441">arXiv:2602.05441</a>. Accepted at CoRL.</dd>
+    <dt>Robots</dt><dd>Mobile ALOHA (bimanual), with π₀.₅ and GR00T-N1.6 baselines</dd>
+  </dl>
+</header>
+
+<section>
+  <h2>The question</h2>
+  <p>Vision-language-action (VLA) models can open a drawer or press a button they were shown during training. The open question is whether they understand the <em>affordance</em>, for example that a toggle switch flips and a slider slides, well enough to operate a device they have never seen that is built from the same kinds of controls. BusyBox is a benchmark built to measure exactly that.</p>
+</section>
+
+<section>
+  <h2>The benchmark</h2>
+  <p>BusyBox is a physical board made of six modules carrying switches, sliders, buttons, a dial and a display. The modules can be swapped and rearranged, so the same set of controls can be presented as many visually different devices. A policy that has really learned "how a slider works" should transfer across layouts; one that memorised a scene should not.</p>
+  <p>The paper evaluates strong open-weight VLA models, π₀.₅ and GR00T-N1.6, and finds that generalising across BusyBox variants is very hard even for them. To make the benchmark easy to reproduce, the team released CAD files, a bill of materials and a language-annotated demonstration dataset collected on a bimanual Mobile ALOHA robot.</p>
+</section>
+
+<section>
+  <h2>My part</h2>
+  <ul>
+    <li>Automated the data-collection pipelines used to record demonstrations.</li>
+    <li>Operated the robotic arm to collect demonstrations for the dataset, which grew to 1,993 bimanual demonstrations.</li>
+    <li>Co-authored the paper.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Read more</h2>
+  <ul>
+    <li><a href="https://arxiv.org/abs/2602.05441">Paper on arXiv</a></li>
+    <li><a href="https://www.microsoft.com/en-us/research/publication/benchmarking-affordance-generalization-with-busybox/">Microsoft Research publication page</a></li>
+  </ul>
+</section>
+
+<nav class="pager" aria-label="More projects">
+  <a class="prev" href="../lidar-segmentation/"><span>Previous</span><strong>Off-road LiDAR segmentation</strong></a>
+  <a class="next" href="../teleoperation/"><span>Next</span><strong>Vision-based teleoperation</strong></a>
+</nav>
+</article>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+</div>
+</body>
+</html>
