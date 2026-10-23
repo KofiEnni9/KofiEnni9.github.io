@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kofi A. Ennin</title>
+<meta name="description" content="Kofi A. Ennin: computer science student and robotics researcher at Mississippi State University working on off-road autonomy, LiDAR perception, and end-to-end planning.">
+<meta property="og:title" content="Kofi A. Ennin">
+<meta property="og:description" content="Robotics researcher at MSU CAVS working on off-road autonomy, LiDAR perception, and end-to-end planning.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23126E7A'/%3E%3Ccircle cx='11' cy='12' r='3' fill='%23F3F5F2'/%3E%3Ccircle cx='21' cy='19' r='4' fill='none' stroke='%23F3F5F2' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #F3F5F2;
+  --ink: #18201D;
+  --muted: #5C6862;
+  --rule: #D5DBD6;
+  --accent: #126E7A;
+  --moss: #6E8B3D;
+  --ground: #8F9B94;
+  --canvas-bg: #E7ECE8;
+  --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141B19;
+    --ink: #E3E9E5;
+    --muted: #9AA6A0;
+    --rule: #2C3633;
+    --accent: #5EC2CF;
+    --moss: #9DBB66;
+    --ground: #4E5A55;
+    --canvas-bg: #1A2320;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141B19; --ink: #E3E9E5; --muted: #9AA6A0; --rule: #2C3633;
+  --accent: #5EC2CF; --moss: #9DBB66; --ground: #4E5A55; --canvas-bg: #1A2320;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  font-optical-sizing: auto;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: 60rem; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 640px) { .wrap { padding: 0 32px; } }
+
+/* ---------- Hero ---------- */
+.hero {
+  display: grid;
+  gap: 2rem;
+  padding: 3.5rem 0 3rem;
+  border-bottom: 1px solid var(--rule);
+}
+@media (min-width: 820px) {
+  .hero { grid-template-columns: minmax(0, 1fr) 21rem; gap: 3.5rem; align-items: start; padding: 5.5rem 0 4rem; }
+}
+.name {
+  font-family: var(--sans);
+  font-stretch: 78%;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 7vw, 4.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.1rem;
+}
+.role {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+  max-width: 34rem;
+}
+.bio p { margin: 0 0 1rem; max-width: 36rem; }
+.links {
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem;
+  margin: 1.6rem 0 0; padding: 0; list-style: none;
+  font-family: var(--sans); font-weight: 600; font-size: 0.98rem;
+}
+.links .cv {
+  display: inline-block;
+  background: var(--accent); color: var(--paper);
+  padding: 0.45rem 0.95rem; border-radius: 3px; text-decoration: none;
+}
+.links .cv:hover { filter: brightness(1.08); }
+.links li { display: flex; align-items: center; }
+
+figure.scan { margin: 0; }
+.scan canvas {
+  display: block; width: 100%; aspect-ratio: 1 / 1;
+  background: var(--canvas-bg);
+  border-radius: 4px;
+}
+.scan figcaption {
+  font-family: var(--sans); font-size: 0.8rem; line-height: 1.45;
+  color: var(--muted); margin-top: 0.6rem;
+}
+@media (max-width: 819px) {
+  figure.scan { max-width: 22rem; }
+}
+
+/* ---------- Sections ---------- */
+section { padding: 3rem 0 0.5rem; }
+h2 {
+  font-family: var(--sans);
+  font-stretch: 85%;
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.005em;
+  margin: 0 0 1.5rem;
+}
+h3 {
+  font-family: var(--sans);
+  font-weight: 650;
+  font-size: 1.08rem;
+  line-height: 1.35;
+  margin: 0 0 0.15rem;
+}
+.where { color: var(--muted); font-size: 0.97rem; margin: 0 0 0.5rem; }
+ul.points { margin: 0.35rem 0 0; padding-left: 1.1rem; }
+ul.points li { margin: 0 0 0.45rem; max-width: 42rem; }
+ul.points li::marker { color: var(--ground); }
+
+/* Timeline rows: date column on wide screens */
+.entry {
+  display: grid;
+  gap: 0.15rem 2rem;
+  padding: 0 0 1.75rem;
+}
+@media (min-width: 720px) {
+  .entry { grid-template-columns: 8.5rem minmax(0, 1fr); }
+}
+.date {
+  font-family: var(--sans); font-size: 0.9rem; font-weight: 500;
+  color: var(--muted); padding-top: 0.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Publications */
+.pubs { list-style: none; margin: 0; padding: 0; }
+.pubs li { padding: 0 0 1.25rem; max-width: 44rem; }
+.pubs .title { font-weight: 600; }
+.pubs .venue { color: var(--muted); }
+.me { text-decoration: underline; text-decoration-color: var(--moss); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.tag {
+  display: inline-block; font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+  color: var(--moss); border: 1px solid currentColor; border-radius: 3px;
+  padding: 0 0.4rem; margin-left: 0.35rem; vertical-align: 0.1em;
+}
+
+/* Skills */
+dl.skills { margin: 0; display: grid; gap: 0.2rem 2rem; }
+@media (min-width: 720px) { dl.skills { grid-template-columns: 11rem minmax(0, 1fr); } }
+dl.skills dt { font-family: var(--sans); font-weight: 600; font-size: 0.95rem; padding-top: 0.15rem; }
+dl.skills dd { margin: 0 0 0.9rem; max-width: 40rem; }
+
+footer {
+  margin-top: 3rem; padding: 2rem 0 3rem; border-top: 1px solid var(--rule);
+  font-family: var(--sans); font-size: 0.88rem; color: var(--muted);
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem;
+}
+.theme-toggle {
+  font: inherit; color: var(--muted); background: none; border: 1px solid var(--rule);
+  border-radius: 3px; padding: 0.2rem 0.6rem; cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); }
+
+@media print {
+  figure.scan, .theme-toggle { display: none; }
+  .hero { grid-template-columns: 1fr; padding-top: 1rem; }
+  body { background: #fff; color: #000; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <h1 class="name">Kofi A. Ennin</h1>
+    <p class="role">Computer science student and robotics researcher at Mississippi State University</p>
+    <div class="bio">
+      <p>I study computer science with an artificial intelligence concentration in the Shackouls Honors College at Mississippi State, and I'm an undergraduate researcher at the <a href="https://www.cavs.msstate.edu/">Center for Advanced Vehicular Systems</a> (CAVS). My work there is on off-road autonomy: end-to-end planning from camera and LiDAR, point-cloud perception, and closed-loop simulation for vehicles that leave the pavement.</p>
+      <p>I've also built robot data-collection pipelines at Microsoft Research for a vision-language-action benchmark, and spent two summers as a software engineering intern at Microsoft building test and diagnostic infrastructure.</p>
+    </div>
+    <ul class="links">
+      <li><a class="cv" href="cv.pdf">Download CV (PDF)</a></li>
+      <li><a href="mailto:kofienninacheampong@gmail.com">Email</a></li>
+      <li><a href="https://github.com/KofiEnni9">GitHub</a></li>
+    </ul>
+  </div>
+  <figure class="scan">
+    <canvas id="scan" width="672" height="672" role="img" aria-label="Illustration of a top-down LiDAR scan of a forest trail, with tree trunks clustered and outlined by fitted circles."></canvas>
+    <figcaption>A top-down LiDAR sketch of a forest trail: ground returns in grey, trunk clusters circle-fitted, the way my trunk-diameter pipeline sees them.</figcaption>
+  </figure>
+</header>
+
+<main>
+
+<section id="publications" aria-labelledby="h-pubs">
+  <h2 id="h-pubs">Publications</h2>
+  <ul class="pubs">
+    <li>
+      <span class="title">OREAM: Off-Road End-to-End Autonomous Model for Unstructured Environments.</span>
+      <span class="me">K. A. Ennin</span> et al.
+      <span class="venue">In preparation for SPIE.</span>
+    </li>
+    <li>
+      <span class="title">Benchmarking Affordance Generalization with BusyBox.</span>
+      Fortier et al., with <span class="me">K. A. Ennin</span>.
+      <span class="venue">Conference on Robot Learning (CoRL).</span>
+    </li>
+    <li>
+      <span class="title">CaSSeD: CAVS Semantic Segmentation Dataset for Off-Road Autonomous Driving.</span>
+      Dabbiru et al., with <span class="me">K. A. Ennin</span>.
+    </li>
+  </ul>
+</section>
+
+<section id="research" aria-labelledby="h-research">
+  <h2 id="h-research">Research</h2>
+
+  <div class="entry">
+    <div class="date">Oct 2024 – now</div>
+    <div>
+      <h3>Undergraduate Researcher, Center for Advanced Vehicular Systems</h3>
+      <p class="where">Mississippi State University, Starkville, MS</p>
+      <ul class="points">
+        <li>Leading development of <strong>OREAM</strong>, an end-to-end off-road planning model in PyTorch and CUDA. A TransFuser-based camera and LiDAR fusion backbone proposes multiple anchor-based candidate trajectories, and the model picks one by combining a learned drivability cost, a LiDAR traversability cost, and a destination cost. I built the data and evaluation pipelines over camera and LiDAR driving logs.</li>
+        <li>Benchmarking multi-trajectory planning heads, from winner-takes-all multi-mode decoders (MTP-style) to vocabulary-scoring heads (VADv2 and Hydra-MDP-style), and integrating the planner into the MAVS autonomy stack to evaluate cross-season generalization, runtime, and accuracy against existing traversability models.</li>
+        <li>Built a C++17 LiDAR pipeline that estimates tree-trunk diameter from off-road point clouds collected on a Warthog UGV: elevation-grid ground removal, a hand-written k-d tree for Euclidean clustering, and RANSAC plus least-squares circle fitting with PCL and Eigen, profiled stage by stage for latency.</li>
+        <li>Contributed to NATURE, CAVS's open-source C++ ROS and ROS 2 autonomy stack for off-road navigation, extending its elevation-grid perception module and point-cloud interfaces.</li>
+        <li>Adapting NVIDIA AlpaSim, an open-source closed-loop autonomous-vehicle simulator, to evaluate off-road driving policies.</li>
+        <li>Trained a FrustumNet model for 7-class semantic segmentation of off-road LiDAR (vegetation, trail types, grass, obstacles) on an expanded 450-scan labeled dataset, reaching 0.65 mIoU on held-out scans and 0.94 IoU on high vegetation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">2026</div>
+    <div>
+      <h3>AI for Industry Challenge, Intrinsic and Open Robotics</h3>
+      <ul class="points">
+        <li>Built and validated a learned manipulation policy across ROS, Gazebo, MuJoCo, and Isaac Sim, then on real UR5e hardware, iterating between simulation and hardware tests toward deployment on a physical workcell.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">Aug 2025</div>
+    <div>
+      <h3>Robotics Research Intern, Microsoft Research</h3>
+      <ul class="points">
+        <li>Automated data-collection pipelines and operated a robotic arm for BusyBox, a physical benchmark for affordance generalization in vision-language-action models, with a 1,993-demonstration bimanual Mobile ALOHA dataset and π₀.₅ and GR00T-N1.6 baselines. Co-authored the resulting paper, accepted at CoRL.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">2025</div>
+    <div>
+      <h3>Autonomous Navigation, Mississippi State University</h3>
+      <ul class="points">
+        <li>Implemented and debugged SLAM, path planning, and state estimation in ROS on a TurtleBot 3 and a Unitree Go1, working with real-time sensor streams and tracing failures across the hardware and software stack.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="experience" aria-labelledby="h-exp">
+  <h2 id="h-exp">Industry experience</h2>
+
+  <div class="entry">
+    <div class="date">May – Aug 2026</div>
+    <div>
+      <h3>Software Engineering Intern, Microsoft Sentinel</h3>
+      <p class="where">Microsoft, Redmond, WA</p>
+      <ul class="points">
+        <li>Designed and built Synthetics for Data Connectors, an automated diagnostic pipeline that validates production data ingestion end to end and flags schema drift, missing fields, and upstream API changes (TypeScript, Node.js, Docker, Azure CLI, MCP).</li>
+        <li>Built connector-agnostic integration and regression test infrastructure with automated failure triage and reporting, designed to scale across hundreds of data connectors.</li>
+        <li>Root-caused a Salesforce schema regression that existing monitoring had missed, and validated the framework against Salesforce, CrowdStrike, Trellix, and Atlassian connectors.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">May – Aug 2025</div>
+    <div>
+      <h3>Software Engineering Intern (Explore), Cloud Ecosystem Security</h3>
+      <p class="where">Microsoft, Redmond, WA</p>
+      <ul class="points">
+        <li>With a three-person team, scoped and built agentic MCP developer tooling that converts hardcoded Azure Function tasks into declarative JSON ARM templates, cutting a two-week manual workflow to one day.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="projects" aria-labelledby="h-projects">
+  <h2 id="h-projects">Projects</h2>
+
+  <div class="entry">
+    <div class="date">2026</div>
+    <div>
+      <h3>Vision-based robot teleoperation <span class="tag">HackGT 13</span></h3>
+      <p class="where">Georgia Tech. <a href="https://github.com/Im-ma/Teleoperation-Arm">Code</a></p>
+      <ul class="points">
+        <li>A markerless teleoperation prototype aimed at remote robot-assisted surgery: browser-based MediaPipe pose tracking from a webcam drives an SO-101 arm in real time through a Python control bridge, so the operator's own body is the controller and no leader arm is needed. Built with a three-person team.</li>
+        <li>Safety behavior for tracking loss: a one-second pose hold to engage, holding position when tracking drops, resuming when it returns, and returning home after 10 seconds with no operator in view.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">2025</div>
+    <div>
+      <h3>SALO, an AI reading assistant</h3>
+      <p class="where"><a href="https://github.com/KofiEnni9/salo-readingtool">Code</a></p>
+      <ul class="points">
+        <li>A desktop PDF reader (Electron, React, pdf.js, Tailwind) with a FastAPI backend that streams page summaries and chat over server-sent events, answering questions with hybrid retrieval (Pinecone vector search plus BM25) and Claude tool calls.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">2024</div>
+    <div>
+      <h3>Campus building classifier <span class="tag">1st place</span></h3>
+      <p class="where">MSU AI Club Campus Vision Challenge. <a href="https://github.com/KofiEnni9/buildingclassification">Code</a></p>
+      <ul class="points">
+        <li>Fine-tuned a ResNet-50 in PyTorch to classify MSU campus buildings from photos, reaching 99.45% validation accuracy (F1 0.9945), with a GPU and CPU inference script for judging.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="entry">
+    <div class="date">2024</div>
+    <div>
+      <h3>Danso, an adaptive study platform for Ghana's NSMQ</h3>
+      <p class="where"><a href="https://github.com/KofiEnni9/Danso">Code</a></p>
+      <ul class="points">
+        <li>A retrieval-augmented study platform for Ghana's National Science and Maths Quiz: FAISS retrieval over sentence-transformer embeddings feeds a quantized open LLM served with FastAPI, and a LinUCB contextual bandit adapts questions to each learner.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="awards" aria-labelledby="h-awards">
+  <h2 id="h-awards">Awards and leadership</h2>
+  <ul class="points">
+    <li>1st place: MSU AI Club Campus Vision Challenge (2024); Robofest, Lawrence Tech (2023); RiSe National Robotics, Ghana (2022).</li>
+    <li>Mentor, Africa Deep Tech Challenge 2025, a pan-African competition on resource-constrained computing with 2,800+ registrants and 400+ projects.</li>
+    <li>Taught and onboarded 100+ high-school students in robotics through hands-on VEX, EV3, and Arduino workshops.</li>
+    <li>Team lead, MSU AI Club. Board member, MSU Boxing Club. Member, NSBE.</li>
+  </ul>
+</section>
+
+<section id="skills" aria-labelledby="h-skills">
+  <h2 id="h-skills">Skills</h2>
+  <dl class="skills">
+    <dt>Robotics</dt>
+    <dd>ROS 1 and 2, PCL, Eigen, Gazebo, MuJoCo, Isaac Sim, NVIDIA AlpaSim, LeRobot, sim-to-real, LiDAR and camera sensing, UR5e, SO-101, Arduino</dd>
+    <dt>Machine learning</dt>
+    <dd>PyTorch, CUDA, NumPy, multimodal sensor fusion, trajectory planning heads, point-cloud segmentation</dd>
+    <dt>Languages</dt>
+    <dd>C++, Python, C, TypeScript, JavaScript, C#, Assembly</dd>
+    <dt>Systems</dt>
+    <dd>Linux, Docker, Git, CI/CD, integration and regression testing, Azure CLI, ARM templates, MCP</dd>
+  </dl>
+</section>
+
+<section id="education" aria-labelledby="h-edu">
+  <h2 id="h-edu">Education</h2>
+  <div class="entry">
+    <div class="date">Expected May 2028</div>
+    <div>
+      <h3>B.S. Computer Science, Artificial Intelligence concentration</h3>
+      <p class="where">Mississippi State University, Shackouls Honors College</p>
+      <p style="margin:0;max-width:42rem">GPA 3.71 (major 3.87). President's and Dean's Scholar. Coursework includes AI Robotics (SLAM, path planning, ROS), Off-Road Autonomy, Data Structures and Algorithms (Honors), Systems Programming, Computer Organization, Microprocessors, and Linear Algebra.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>Kofi A. Ennin, Starkville, Mississippi</span>
+  <button class="theme-toggle" id="theme" type="button">Switch to dark</button>
+</footer>
+
+</div>
+
+<script>
+/* Theme toggle */
+(function () {
+  const btn = document.getElementById('theme');
+  const root = document.documentElement;
+  const sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+  let saved = null;
+  try { saved = localStorage.getItem('theme'); } catch (e) {}
+  if (saved) root.dataset.theme = saved;
+  const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+  const label = () => { btn.textContent = isDark() ? 'Switch to light' : 'Switch to dark'; };
+  label();
+  btn.addEventListener('click', () => {
+    root.dataset.theme = isDark() ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch (e) {}
+    label(); window.dispatchEvent(new Event('themechange'));
+  });
+  sysDark.addEventListener('change', () => { label(); window.dispatchEvent(new Event('themechange')); });
+})();
+
+/* Top-down LiDAR sketch: rings of returns, occlusion shadows behind trunks,
+   trunk clusters with fitted circles. Deterministic so it looks the same every visit. */
+(function () {
+  const cv = document.getElementById('scan');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+
+  const ego = { x: W * 0.5, y: H * 0.86 };
+  // Trail centerline: gentle S-curve heading away from the vehicle
+  const trailX = (y) => W * 0.5 + Math.sin((ego.y - y) / H * 3.2) * W * 0.14;
+  const trees = [
+    [0.22, 0.30, 21], [0.34, 0.55, 15], [0.78, 0.22, 25], [0.72, 0.50, 17],
+    [0.16, 0.70, 18], [0.86, 0.68, 14], [0.58, 0.12, 13], [0.30, 0.12, 16]
+  ].map(([x, y, r]) => ({ x: x * W, y: y * H, r }));
+
+  const pts = [];
+  // Concentric scan rings
+  for (let ring = 0; ring < 34; ring++) {
+    const R = 26 + ring * ring * 0.52 + ring * 9;
+    const n = Math.floor(R * 1.15);
+    for (let i = 0; i < n; i++) {
+      const a = Math.PI + (i / n) * Math.PI * 2;
+      const r = R + (rnd() - 0.5) * 3;
+      const x = ego.x + Math.cos(a) * r, y = ego.y + Math.sin(a) * r;
+      if (x < 4 || x > W - 4 || y < 4 || y > H - 4) continue;
+      // occlusion: skip points behind a trunk
+      let hidden = false;
+      for (const t of trees) {
+        const dx = t.x - ego.x, dy = t.y - ego.y, dt = Math.hypot(dx, dy);
+        if (r <= dt) continue;
+        const da = Math.abs(Math.atan2(Math.sin(a - Math.atan2(dy, dx)), Math.cos(a - Math.atan2(dy, dx))));
+        if (da < Math.asin(Math.min(1, (t.r + 2) / dt))) { hidden = true; break; }
+      }
+      if (hidden) continue;
+      const onTrail = Math.abs(x - trailX(y)) < W * 0.06;
+      pts.push({ x, y, a, kind: onTrail ? 'trail' : 'ground' });
+    }
+  }
+  // Trunk returns: near-side arc of each trunk, dense
+  for (const t of trees) {
+    const facing = Math.atan2(ego.y - t.y, ego.x - t.x);
+    for (let i = 0; i < 64; i++) {
+      const a = facing + (rnd() - 0.5) * Math.PI * 0.95;
+      const r = t.r + (rnd() - 0.5) * 2.2;
+      const x = t.x + Math.cos(a) * r, y = t.y + Math.sin(a) * r;
+      pts.push({ x, y, a: Math.atan2(y - ego.y, x - ego.x), kind: 'trunk' });
+    }
+  }
+  // Sweep order: by bearing from the ego vehicle
+  const norm = (a) => { let v = a - Math.PI; while (v < 0) v += Math.PI * 2; return v % (Math.PI * 2); };
+  pts.forEach(p => p.s = norm(p.a));
+
+  const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  function draw(progress) {
+    const ground = css('--ground'), moss = css('--moss'), accent = css('--accent'), ink = css('--ink');
+    ctx.clearRect(0, 0, W, H);
+    const lim = progress * Math.PI * 2;
+    for (const p of pts) {
+      if (p.s > lim) continue;
+      if (p.kind === 'ground') { ctx.fillStyle = ground; ctx.globalAlpha = 0.85; ctx.fillRect(p.x - 1.1, p.y - 1.1, 2.2, 2.2); }
+      else if (p.kind === 'trail') { ctx.fillStyle = moss; ctx.globalAlpha = 0.9; ctx.fillRect(p.x - 1.2, p.y - 1.2, 2.4, 2.4); }
+      else { ctx.fillStyle = ink; ctx.globalAlpha = 1; ctx.fillRect(p.x - 1.4, p.y - 1.4, 2.8, 2.8); }
+    }
+    ctx.globalAlpha = 1;
+    // Fitted circles appear once the sweep has passed each trunk
+    ctx.strokeStyle = accent; ctx.lineWidth = 2.4;
+    for (const t of trees) {
+      if (norm(Math.atan2(t.y - ego.y, t.x - ego.x)) > lim) continue;
+      ctx.beginPath(); ctx.arc(t.x, t.y, t.r + 3, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(t.x - 3, t.y); ctx.lineTo(t.x + 3, t.y); ctx.moveTo(t.x, t.y - 3); ctx.lineTo(t.x, t.y + 3); ctx.stroke();
+    }
+    // Vehicle
+    ctx.fillStyle = ink;
+    ctx.beginPath(); ctx.moveTo(ego.x, ego.y - 13); ctx.lineTo(ego.x + 9, ego.y + 9); ctx.lineTo(ego.x - 9, ego.y + 9); ctx.closePath(); ctx.fill();
+  }
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { draw(1); }
+  else {
+    const dur = 1800; let t0 = null;
+    const step = (ts) => {
+      if (t0 === null) t0 = ts;
+      const k = Math.min(1, (ts - t0) / dur);
+      draw(1 - Math.pow(1 - k, 3));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  window.addEventListener('themechange', () => draw(1));
+})();
+</script>
+</body>
+</html>

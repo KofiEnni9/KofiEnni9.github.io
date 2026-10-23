@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kofi A. Ennin, CV</title>
+<!-- Source for ../cv.pdf. Rebuild with: python3 _cv/build.py -->
+<style>
+@page { size: Letter; margin: 0.55in 0.6in 0.55in 0.6in; }
+:root { --ink: #18201D; --muted: #55605A; --accent: #126E7A; --rule: #C9D1CC; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font-family: "Bitstream Charter", "Charter", Georgia, serif; font-size: 9.6pt; line-height: 1.38; }
+a { color: var(--accent); text-decoration: none; }
+header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.2pt solid var(--ink); padding-bottom: 6pt; margin-bottom: 8pt; }
+h1 { font-family: "Inter Display", "Inter", sans-serif; font-weight: 800; font-size: 22pt; line-height: 1; margin: 0; letter-spacing: -0.01em; }
+.contact { text-align: right; font-family: "Inter", sans-serif; font-size: 8.4pt; line-height: 1.5; color: var(--muted); }
+h2 { break-after: avoid; page-break-after: avoid; font-family: "Inter", sans-serif; font-weight: 700; font-size: 10.5pt; color: var(--accent); margin: 10pt 0 4pt; padding-bottom: 2pt; border-bottom: 0.6pt solid var(--rule); }
+.row { display: flex; justify-content: space-between; gap: 12pt; }
+.row b { font-family: "Inter", sans-serif; font-weight: 650; font-size: 9.5pt; }
+.row .d { font-family: "Inter", sans-serif; font-size: 8.4pt; color: var(--muted); white-space: nowrap; }
+.sub { color: var(--muted); font-style: italic; }
+.item { margin: 0 0 5pt; break-inside: avoid; }
+ul { margin: 1.5pt 0 0; padding-left: 12pt; }
+li { margin: 0 0 1.5pt; }
+p { margin: 0 0 2pt; }
+.pubs li { margin-bottom: 2.5pt; }
+.me { font-weight: 700; }
+.sk { display: grid; grid-template-columns: 1.15in 1fr; gap: 1pt 8pt; }
+.sk dt { font-family: "Inter", sans-serif; font-weight: 600; font-size: 8.6pt; padding-top: 0.6pt; }
+.sk dd { margin: 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Kofi A. Ennin</h1>
+  <div class="contact">
+    <a href="mailto:kofienninacheampong@gmail.com">kofienninacheampong@gmail.com</a><br>
+    <a href="https://kofienni9.github.io">kofienni9.github.io</a> &nbsp;/&nbsp; <a href="https://github.com/KofiEnni9">github.com/KofiEnni9</a><br>
+    Starkville, MS
+  </div>
+</header>
+
+<h2>Education</h2>
+<div class="item">
+  <div class="row"><b>Mississippi State University, Shackouls Honors College</b><span class="d">Expected May 2028</span></div>
+  <p>B.S. Computer Science, Artificial Intelligence concentration. GPA 3.71/4.0, major GPA 3.87/4.0. President's and Dean's Scholar.</p>
+  <p class="sub">Coursework: Systems Programming, Computer Organization, Microprocessors, Data Structures &amp; Algorithms (Honors), Digital Devices, Software Development Methods &amp; Tools, Off-Road Autonomy, Discrete Structures, Linear Algebra, Calculus III; in progress: AI Robotics (SLAM, Path Planning, ROS), Probability.</p>
+</div>
+
+<h2>Publications</h2>
+<ul class="pubs">
+  <li><span class="me">K. A. Ennin</span> et al. OREAM: Off-Road End-to-End Autonomous Model for Unstructured Environments. <i>In preparation for SPIE.</i></li>
+  <li>Fortier et al. (incl. <span class="me">K. A. Ennin</span>). Benchmarking Affordance Generalization with BusyBox. <i>CoRL.</i></li>
+  <li>Dabbiru et al. (incl. <span class="me">K. A. Ennin</span>). CaSSeD: CAVS Semantic Segmentation Dataset for Off-Road Autonomous Driving.</li>
+</ul>
+
+<h2>Research &amp; Robotics</h2>
+<div class="item">
+  <div class="row"><b>MSU Center for Advanced Vehicular Systems (CAVS), Undergraduate Researcher</b><span class="d">Oct 2024 – Present</span></div>
+  <ul>
+    <li>Leading development of OREAM, an end-to-end off-road planning model (PyTorch, CUDA): a TransFuser-based camera + LiDAR fusion backbone generates multiple anchor-based candidate trajectories, then selects one by combining a learned drivability cost, a LiDAR traversability cost, and a destination cost; built data and evaluation pipelines over camera and LiDAR driving logs.</li>
+    <li>Benchmarking multi-trajectory planning heads, including winner-takes-all multi-mode decoders (MTP-style) and vocabulary-scoring heads (VADv2 / Hydra-MDP-style); integrating the planner into the MAVS autonomy stack and evaluating cross-season generalization, runtime, and accuracy against existing traversability models.</li>
+    <li>Built a C++17 LiDAR pipeline that estimates tree-trunk diameter from off-road point clouds collected on a Warthog UGV: elevation-grid ground removal, a hand-written k-d tree for Euclidean clustering, and RANSAC and least-squares circle fitting (PCL, Eigen), with per-stage latency profiling.</li>
+    <li>Contributed to NATURE, CAVS's open-source C++ ROS/ROS 2 autonomy stack for off-road navigation, extending its elevation-grid perception module and point-cloud interfaces.</li>
+    <li>Adapting NVIDIA AlpaSim, an open-source closed-loop AV simulator, for evaluating off-road driving policies.</li>
+    <li>Trained a FrustumNet model for 7-class semantic segmentation of off-road LiDAR point clouds on an expanded 450-scan labeled dataset (70/20/10 split), reaching 0.65 mIoU on held-out scans and 0.94 IoU on high vegetation.</li>
+  </ul>
+</div>
+<div class="item">
+  <div class="row"><b>AI for Industry Challenge, Intrinsic × Open Robotics</b><span class="d">2026</span></div>
+  <ul><li>Built and validated a learned manipulation policy across ROS, Gazebo, MuJoCo, Isaac Sim, and real UR5e hardware, iterating through simulation and hardware testing toward deployment on a physical workcell.</li></ul>
+</div>
+<div class="item">
+  <div class="row"><b>Microsoft Research, Robotics Research Intern</b><span class="d">Aug 2025</span></div>
+  <ul><li>Automated data-collection pipelines and operated a robotic arm for BusyBox, a physical benchmark for affordance generalization in vision-language-action (VLA) models, with a 1,993-demonstration bimanual Mobile ALOHA dataset and π₀.₅ and GR00T-N1.6 baselines; co-authored the resulting paper, accepted at CoRL.</li></ul>
+</div>
+<div class="item">
+  <div class="row"><b>Autonomous Navigation, Mississippi State University</b><span class="d">2025</span></div>
+  <ul><li>Implemented and debugged SLAM, path planning, and state estimation in ROS with real-time sensor streams on TurtleBot 3 and Unitree Go1; root-caused failures across the hardware/software stack.</li></ul>
+</div>
+
+<h2>Industry Experience</h2>
+<div class="item">
+  <div class="row"><b>Microsoft, Software Engineering Intern, Microsoft Sentinel</b><span class="d">May 2026 – Aug 2026</span></div>
+  <p class="sub">Redmond, WA</p>
+  <ul>
+    <li>Designed and built Synthetics for Data Connectors, an automated diagnostic pipeline that validates production data ingestion end to end and flags schema drift, missing fields, and upstream API changes (TypeScript/Node.js, Docker, Azure CLI, MCP).</li>
+    <li>Built connector-agnostic integration and regression test infrastructure with automated failure triage and reporting, architected to scale validation across hundreds of data connectors.</li>
+    <li>Root-caused a Salesforce schema regression that existing monitoring missed; validated the framework against Salesforce, CrowdStrike, Trellix, and Atlassian connectors.</li>
+  </ul>
+</div>
+<div class="item">
+  <div class="row"><b>Microsoft, Software Engineering Intern (Explore), Cloud Ecosystem Security</b><span class="d">May 2025 – Aug 2025</span></div>
+  <p class="sub">Redmond, WA</p>
+  <ul><li>Worked with a three-person engineering team to scope and build agentic MCP developer tooling that converts hardcoded Azure Function tasks into declarative JSON ARM templates, cutting a two-week manual workflow to one day.</li></ul>
+</div>
+
+<h2>Projects</h2>
+<div class="item">
+  <div class="row"><b>Vision-Based Robot Teleoperation, HackGT 13, Georgia Tech</b><span class="d">2026</span></div>
+  <ul>
+    <li>Built a markerless teleoperation prototype with a three-person team, aimed at remote robot-assisted surgery: browser-based MediaPipe pose tracking from a webcam drives an SO-101 arm in real time through a Python control bridge, with no leader arm needed.</li>
+    <li>Engineered safety behaviors for tracking loss: one-second pose-hold to engage, hold on tracking loss, automatic resume, and return-to-home after 10 s with no operator in view.</li>
+  </ul>
+</div>
+<div class="item">
+  <div class="row"><b>Campus Building Classifier, MSU AI Club Campus Vision Challenge (1st place)</b><span class="d">2024</span></div>
+  <ul><li>Fine-tuned a ResNet-50 in PyTorch to classify MSU campus buildings from photos, reaching 99.45% validation accuracy (F1 0.9945); built a GPU/CPU inference script for judging.</li></ul>
+</div>
+<div class="item">
+  <div class="row"><b>SALO, AI Reading Assistant</b><span class="d">2025</span></div>
+  <ul><li>Desktop PDF reader (Electron, React, pdf.js, Tailwind) with a FastAPI backend streaming page summaries and chat over SSE; hybrid retrieval (Pinecone vector search + BM25) and Claude tool calls, with Firebase auth.</li></ul>
+</div>
+<div class="item">
+  <div class="row"><b>Danso, Adaptive Study Platform for Ghana's NSMQ</b><span class="d">2024</span></div>
+  <ul><li>RAG study platform: FAISS retrieval over sentence-transformer embeddings feeding a quantized open LLM served with FastAPI, a Streamlit quiz UI, and a LinUCB contextual bandit that adapts questions to each learner.</li></ul>
+</div>
+
+<h2>Technical Skills</h2>
+<dl class="sk">
+  <dt>Languages</dt><dd>C++, Python, C, TypeScript, JavaScript, C#, Assembly</dd>
+  <dt>Robotics</dt><dd>ROS 1/2, LeRobot, SO-101, NVIDIA AlpaSim, PCL, Eigen, Gazebo, MuJoCo, Isaac Sim, Sim-to-Real, LiDAR, Cameras, UR5e, Arduino</dd>
+  <dt>Data &amp; ML</dt><dd>PyTorch, CUDA, NumPy, Data Ingestion &amp; Validation, Schema Monitoring, Data Pipelines</dd>
+  <dt>Testing</dt><dd>Integration, Regression &amp; Unit Testing, Test Automation, CI/CD, Failure Triage, Code Review</dd>
+  <dt>Infrastructure</dt><dd>Linux, Docker, Git/GitHub, Azure CLI, PowerShell, ARM Templates, MCP, RPC-style Tooling</dd>
+</dl>
+
+<h2>Leadership &amp; Awards</h2>
+<ul>
+  <li>Taught and onboarded 100+ high-school students in robotics; gathered feedback to iterate on technical guides and hands-on workshops (VEX, EV3, Arduino). MSU AI Club Team Lead; MSU Boxing Club Board Member; NSBE member.</li>
+  <li>Mentor, Africa Deep Tech Challenge 2025: mentored teams in a pan-African competition on resource-constrained computing (2,800+ registrants, 400+ projects, $20K in prizes), powered by Future Africa with CcHUB, IHS Towers, and Ilorin Innovation Hub.</li>
+  <li>1st Place: MSU AI Club Campus Vision Challenge (2024); Robofest, Lawrence Tech (2023); RiSe National Robotics, Ghana (2022).</li>
+</ul>
+</body>
+</html>
